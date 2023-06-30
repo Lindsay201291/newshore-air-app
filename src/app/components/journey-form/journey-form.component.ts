@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FlightService } from '../../core/services/flight.service';
 import { Journey } from '../../core/models/journey.model';
+import { Flight } from '../../core/models/flight.model';
 
 @Component({
   selector: 'app-journey-form',
@@ -10,13 +11,33 @@ import { Journey } from '../../core/models/journey.model';
 export class JourneyFormComponent {
   origin: string = "";
   destination: string = "";
-  journey!: Journey;
+  journey!: Journey | null;
 
   constructor(private flightService: FlightService) { }
 
   calculateJourney(): void {
-    this.flightService.getFlights(0).subscribe((flights) => {
-      
+    this.flightService.getFlights(0).subscribe((flights: Flight[]) => {
+      const journeyFlights: Flight[] = [];
+      let currentOrigin = this.origin;
+
+      while (currentOrigin !== this.destination) {
+        const nextFlight = flights.find((flight) => flight.departureStation === currentOrigin);
+
+        if (nextFlight) {
+          journeyFlights.push(nextFlight);
+          currentOrigin = nextFlight.arrivalStation;
+        } else {
+          this.journey = null;
+          return;
+        }
+      }
+
+      this.journey = {
+        origin: this.origin,
+        destination: this.destination,
+        price: journeyFlights.reduce((totalPrice, flight) => totalPrice + parseFloat(flight.price), 0),
+        flights: journeyFlights
+      };
     });
   }
 
