@@ -1,0 +1,41 @@
+.container {
+	background-color: #2d75ce;
+	padding: 20px;
+	color: white;
+}
+
+.search-button {
+	background-color: #e04438;
+	color: white;
+	border-radius: 10px;
+	border: none;
+	padding: 10px;
+}
+
+.search-button:disabled {
+	background-color: lightgray;
+	color: black;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+.banner-container {
+  padding: 20px;
+}
+
+h1 {
+	font-weight: bold;
+}
+
+.header, .footer {
+  background-color: #17203d;
+  color: white;
+}
+
+.footer {
+	flex-shrink: 0;
+	padding: 20px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
