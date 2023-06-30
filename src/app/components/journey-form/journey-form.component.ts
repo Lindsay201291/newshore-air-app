@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FlightService } from '../../core/services/flight.service';
+import { CurrencyExchangeRateService } from '../../core/services/currency-exchange-rate.service';
 import { Journey } from '../../core/models/journey.model';
 import { Flight } from '../../core/models/flight.model';
 
@@ -14,13 +15,37 @@ export class JourneyFormComponent {
   journey!: Journey | null;
   isLoading: boolean = false;
   hasData: boolean = true;
+  currency: string = "";
+  euroExchangeRate: number = 0.920161;
+  sterlingExchangeRate: number = 0.792766;
 
-  constructor(private flightService: FlightService) { }
+  constructor(private flightService: FlightService, private currencyExchangeRateService: CurrencyExchangeRateService) { }
 
-  calculateJourney(): void {
+  ngOnInit(): void {
+    this.currencyExchangeRateService.getCurrencyData().subscribe(response => {
+      this.euroExchangeRate = response.data['EUR'];
+      this.sterlingExchangeRate = response.data['GBP'];
+    });
+  }
+
+  resetJourney() {
+    this.journey = null;
+  }
+
+  calculateJourney(currency: string): void {
     this.journey = null;
     this.isLoading = true;
     this.hasData = true;
+    let exchangeRate: number;
+
+    if (currency === "USD") {
+      exchangeRate = 1;
+    } else if (currency === "EUR") {
+      exchangeRate = this.euroExchangeRate;
+    } else if (currency === "GBP") {
+      exchangeRate = this.sterlingExchangeRate;
+    }
+
     this.flightService.getFlights(0).subscribe((flights: Flight[]) => {
       const journeyFlights: Flight[] = [];
       let currentOrigin = this.origin;
@@ -39,7 +64,7 @@ export class JourneyFormComponent {
             transport: transport,
             departureStation: nextFlight.departureStation,
             arrivalStation: nextFlight.arrivalStation,
-            price: nextFlight.price.toString()
+            price: ((nextFlight.price*exchangeRate).toFixed(2)).toString()
           };
 
           journeyFlights.push(flight);

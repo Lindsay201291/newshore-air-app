@@ -12,7 +12,7 @@
   <img src="https://i.imgur.com/0oQWHNt.jpg" alt="Banner" class="img-fluid">
 </div>
 <div class="container d-flex justify-content-center align-items-center my-4">
-	<form (ngSubmit)="calculateJourney()" #journeyForm="ngForm">
+	<form (ngSubmit)="calculateJourney(currency)" #journeyForm="ngForm">
 			<div class="form-group">
 				<label class="mr-2" for="originInput">Origen:</label>
 				<input class="pl-1" id="originInput" type="text" name="origin" [(ngModel)]="origin" maxlength="3" required (input)="onInputToUpper($event)">
@@ -20,6 +20,14 @@
 			<div class="form-group">
 				<label class="mr-2" for="destinationInput">Destino:</label>
 				<input class="pl-1" id="destinationInput" type="text" name="destination" [(ngModel)]="destination" maxlength="3" required (input)="onInputToUpper($event)">
+			</div>
+			<div class="form-group">
+				<label class="mr-2" for="currencySelect">Moneda:</label>
+				<select class="pl-1" id="currencySelect" name="currency" [(ngModel)]="currency" (change)="resetJourney()" required>
+					<option value="USD">USD</option>
+					<option value="EUR">EUR</option>
+					<option value="GBP">GBP</option>
+				</select>
 			</div>
 			<button class="search-button" type="submit" [disabled]="!journeyForm.valid">Buscar ruta</button>
 		</form>
@@ -38,7 +46,9 @@
 		<h4>Vuelo:</h4>
 		<p>Origen: {{ journey.origin }}</p>
 		<p>Destino: {{ journey.destination }}</p>
-		<p>Precio Total: {{ journey.price }}</p>
+		<p *ngIf="currency === 'USD'">Precio Total: ${{ journey.price }}</p>
+		<p *ngIf="currency === 'EUR'">Precio Total: €{{ journey.price }}</p>
+		<p *ngIf="currency === 'GBP'">Precio Total: £{{ journey.price }}</p>
 	</div>
 	<div class="pt-2">
 		<h4>Ruta de vuelo:</h4>
@@ -47,7 +57,9 @@
 				<p>Transporte: {{ flight.transport.flightCarrier }} - {{ flight.transport.flightNumber }}</p>
 				<p>Origen: {{ flight.departureStation }}</p>
 				<p>Destino: {{ flight.arrivalStation }}</p>
-				<p>Precio: {{ flight.price }}</p>
+				<p *ngIf="currency === 'USD'">Precio: ${{ flight.price }}</p>
+				<p *ngIf="currency === 'EUR'">Precio: €{{ flight.price }}</p>
+				<p *ngIf="currency === 'GBP'">Precio: £{{ flight.price }}</p>
 			</li>
 		</ul>
 	</div>
