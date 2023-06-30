@@ -25,7 +25,15 @@
 		</form>
 </div>
 
-<div class="mb-5 pl-5 container justify-content-center align-items-center my-4" *ngIf="journey">
+<div class="text-center" *ngIf="isLoading">
+	<p>Cargando...</p>
+</div>
+
+<div class="text-center" *ngIf="!hasData">
+	<p>Su consulta no pudo ser procesada.</p>
+</div>
+
+<div class="mb-5 flight-detail-container justify-content-center align-items-center my-4" *ngIf="journey">
 	<div>
 		<h4>Vuelo:</h4>
 		<p>Origen: {{ journey.origin }}</p>

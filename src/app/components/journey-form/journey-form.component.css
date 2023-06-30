@@ -1,8 +1,14 @@
 .container {
 	background-color: #2d75ce;
-	padding: 20px;
 	color: white;
-	margin-bottom: 60px;
+}
+
+.container, .flight-detail-container {
+	padding: 20px;
+}
+
+.flight-detail-container {
+	padding-left: 95px;
 }
 
 .search-button {

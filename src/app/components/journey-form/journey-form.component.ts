@@ -12,10 +12,15 @@ export class JourneyFormComponent {
   origin: string = "";
   destination: string = "";
   journey!: Journey | null;
+  isLoading: boolean = false;
+  hasData: boolean = true;
 
   constructor(private flightService: FlightService) { }
 
   calculateJourney(): void {
+    this.journey = null;
+    this.isLoading = true;
+    this.hasData = true;
     this.flightService.getFlights(0).subscribe((flights: Flight[]) => {
       const journeyFlights: Flight[] = [];
       let currentOrigin = this.origin;
@@ -29,7 +34,7 @@ export class JourneyFormComponent {
             flightCarrier: nextFlight.flightCarrier,
             flightNumber: nextFlight.flightNumber
           };
-          
+
           let flight: Flight = {
             transport: transport,
             departureStation: nextFlight.departureStation,
@@ -41,6 +46,8 @@ export class JourneyFormComponent {
           currentOrigin = nextFlight.arrivalStation;
         } else {
           this.journey = null;
+          this.isLoading = false;
+          this.hasData = false;
           return;
         }
       }
@@ -51,6 +58,7 @@ export class JourneyFormComponent {
         price: journeyFlights.reduce((totalPrice, flight) => totalPrice + parseFloat(flight.price), 0),
         flights: journeyFlights
       };
+      this.isLoading = false;
     });
   }
 
