@@ -2,6 +2,7 @@
 	background-color: #2d75ce;
 	padding: 20px;
 	color: white;
+	margin-bottom: 60px;
 }
 
 .search-button {
@@ -33,9 +34,13 @@ h1 {
 }
 
 .footer {
-	flex-shrink: 0;
-	padding: 20px 0;
+  flex-shrink: 0;
+  padding: 10px 0;
   position: fixed;
   bottom: 0;
   width: 100%;
+}
+
+li {
+	margin-left: 20px;
 }

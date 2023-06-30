@@ -21,10 +21,23 @@ export class JourneyFormComponent {
       let currentOrigin = this.origin;
 
       while (currentOrigin !== this.destination) {
-        const nextFlight = flights.find((flight) => flight.departureStation === currentOrigin);
+        let nextFlight: any = flights.find((flight) => flight.departureStation === currentOrigin);
 
         if (nextFlight) {
-          journeyFlights.push(nextFlight);
+
+          let transport = {
+            flightCarrier: nextFlight.flightCarrier,
+            flightNumber: nextFlight.flightNumber
+          };
+          
+          let flight: Flight = {
+            transport: transport,
+            departureStation: nextFlight.departureStation,
+            arrivalStation: nextFlight.arrivalStation,
+            price: nextFlight.price.toString()
+          };
+
+          journeyFlights.push(flight);
           currentOrigin = nextFlight.arrivalStation;
         } else {
           this.journey = null;
