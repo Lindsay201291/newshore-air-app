@@ -64,7 +64,7 @@ export class JourneyFormComponent {
             transport: transport,
             departureStation: nextFlight.departureStation,
             arrivalStation: nextFlight.arrivalStation,
-            price: ((nextFlight.price*exchangeRate).toFixed(2)).toString()
+            price: parseFloat((nextFlight.price*exchangeRate).toFixed(2))
           };
 
           journeyFlights.push(flight);
@@ -80,7 +80,7 @@ export class JourneyFormComponent {
       this.journey = {
         origin: this.origin,
         destination: this.destination,
-        price: journeyFlights.reduce((totalPrice, flight) => totalPrice + parseFloat(flight.price), 0),
+        price: journeyFlights.reduce((totalPrice, flight) => totalPrice + flight.price, 0),
         flights: journeyFlights
       };
       this.isLoading = false;
