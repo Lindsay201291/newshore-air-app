@@ -54,10 +54,21 @@ h1 {
   width: 100%;
 }
 
+.text-field {
+	border: none;
+	border-radius: 5px;
+}
+
 p {
 	margin-bottom: 0.25rem;
 }
 
 li {
 	margin-left: 20px;
+}
+
+@media (max-width: 600px) {
+  .flight-detail-container {
+		padding-left: 45px;
+	}
 }

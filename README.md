@@ -4,9 +4,11 @@ Este proyecto se generó con [Angular CLI](https://github.com/angular/angular-cl
 
 ## Requerimientos
 
-Descargar e instalar [Node.js](https://nodejs.org/es/download).
+Descargue e instale [Node.js](https://nodejs.org/es/download).
 
-Una vez descargado e instalado Node.js, ejecuta el comando `npm i -g @angular/cli` en la terminal.
+Una vez descargado e instalado Node.js, ejecute el comando `npm i -g @angular/cli` en la terminal.
+
+Una vez que haya descargado el repositorio, diríjase a la carpeta del proyecto y ejecute el comando `npm install` para descargar los paquetes necesarios.
 
 ## Servidor de desarrollo
 

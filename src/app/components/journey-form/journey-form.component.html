@@ -14,15 +14,15 @@
 	<form (ngSubmit)="getFlights(currency)" #journeyForm="ngForm">
 			<div class="form-group">
 				<label class="mr-2" for="originInput">Origen:</label>
-				<input class="pl-1" id="originInput" type="text" name="origin" [(ngModel)]="origin" maxlength="3" required (input)="onInputToUpper($event)">
+				<input class="pl-1 text-field" id="originInput" type="text" name="origin" [(ngModel)]="origin" maxlength="3" required (input)="onInputToUpper($event)">
 			</div>
 			<div class="form-group">
 				<label class="mr-2" for="destinationInput">Destino:</label>
-				<input class="pl-1" id="destinationInput" type="text" name="destination" [(ngModel)]="destination" maxlength="3" required (input)="onInputToUpper($event)">
+				<input class="pl-1 text-field" id="destinationInput" type="text" name="destination" [(ngModel)]="destination" maxlength="3" required (input)="onInputToUpper($event)">
 			</div>
 			<div class="form-group">
-				<label class="mr-2" for="currencySelect">Moneda:</label>
-				<select class="pl-1" id="currencySelect" name="currency" [(ngModel)]="currency" (change)="resetJourney()" required>
+				<label class="mr-2 " for="currencySelect">Moneda:</label>
+				<select class="text-field" id="currencySelect" name="currency" [(ngModel)]="currency" (change)="resetJourney()" required>
 					<option value="USD">USD</option>
 					<option value="EUR">EUR</option>
 					<option value="GBP">GBP</option>
