@@ -46,12 +46,11 @@ export class JourneyFormComponent {
     return false;
   }
 
-  calculateJourney(currency: string) {
+  calculateRoute(flights: any[], currency: string) {
     this.visitedStations = [];
     this.journey = null;
-    this.isLoading = true;
     this.hasData = true;
-    let exchangeRate: number;
+    let exchangeRate: number = 0;
 
     if (currency === "USD") {
       exchangeRate = 1;
@@ -61,8 +60,7 @@ export class JourneyFormComponent {
       exchangeRate = this.sterlingExchangeRate;
     }
 
-    this.flightService.getFlights(2).subscribe((flights: Flight[]) => {
-      const journeyFlights: Flight[] = [];
+    const journeyFlights: Flight[] = [];
       let currentOrigin = this.origin.toUpperCase();
       this.destination = this.destination.toUpperCase();
       console.log(currentOrigin);
@@ -80,10 +78,12 @@ export class JourneyFormComponent {
             flightNumber: nextFlight.flightNumber
           };
 
+          console.log("TRANSPORTE: "+JSON.stringify(transport));
+
           let flight: Flight = {
             transport: transport,
-            departureStation: nextFlight.departureStation,
-            arrivalStation: nextFlight.arrivalStation,
+            origin: nextFlight.departureStation.toUpperCase(),
+            destination: nextFlight.arrivalStation.toUpperCase(),
             price: parseFloat((nextFlight.price*exchangeRate).toFixed(2))
           };
 
@@ -107,6 +107,13 @@ export class JourneyFormComponent {
 
       console.log(JSON.stringify(this.journey))
       this.isLoading = false;
+  }
+
+  getFlights(currency: string) {
+    this.isLoading = true;
+    this.journey = null;
+    this.flightService.getFlights(2).subscribe((flights: Flight[]) => {
+      this.calculateRoute(flights, currency);
     });
   }
 

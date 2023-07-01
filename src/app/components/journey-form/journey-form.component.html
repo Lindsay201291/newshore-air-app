@@ -11,7 +11,7 @@
 <div class="banner-container">
 </div>
 <div class="container d-flex justify-content-center align-items-center my-4">
-	<form (ngSubmit)="calculateJourney(currency)" #journeyForm="ngForm">
+	<form (ngSubmit)="getFlights(currency)" #journeyForm="ngForm">
 			<div class="form-group">
 				<label class="mr-2" for="originInput">Origen:</label>
 				<input class="pl-1" id="originInput" type="text" name="origin" [(ngModel)]="origin" maxlength="3" required (input)="onInputToUpper($event)">
@@ -43,7 +43,7 @@
 <div class="mb-5 flight-detail-container justify-content-center align-items-center my-4" *ngIf="journey">
 	<div>
 		<h4>Vuelo:</h4>
-		<p>Origen: {{ journey.origin }}</p>
+		<p>Origen: {{ journey.origin | uppercase }}</p>
 		<p>Destino: {{ journey.destination }}</p>
 		<p *ngIf="currency === 'USD'">Precio Total: ${{ journey.price }}</p>
 		<p *ngIf="currency === 'EUR'">Precio Total: €{{ journey.price }}</p>
@@ -54,8 +54,8 @@
 		<ul>
 			<li *ngFor="let flight of journey.flights">
 				<p>Transporte: {{ flight.transport.flightCarrier }} - {{ flight.transport.flightNumber }}</p>
-				<p>Origen: {{ flight.departureStation }}</p>
-				<p>Destino: {{ flight.arrivalStation }}</p>
+				<p>Origen: {{ flight.origin }}</p>
+				<p>Destino: {{ flight.destination }}</p>
 				<p *ngIf="currency === 'USD'">Precio: ${{ flight.price }}</p>
 				<p *ngIf="currency === 'EUR'">Precio: €{{ flight.price }}</p>
 				<p *ngIf="currency === 'GBP'">Precio: £{{ flight.price }}</p>
