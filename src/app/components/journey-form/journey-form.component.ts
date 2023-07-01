@@ -18,6 +18,7 @@ export class JourneyFormComponent {
   currency: string = "";
   euroExchangeRate: number = 0.920161;
   sterlingExchangeRate: number = 0.792766;
+  visitedStations: string[]  = [];
 
   constructor(private flightService: FlightService, private currencyExchangeRateService: CurrencyExchangeRateService) { }
 
@@ -32,7 +33,21 @@ export class JourneyFormComponent {
     this.journey = null;
   }
 
-  calculateJourney(currency: string): void {
+  saveVisitedStations(station: string) {
+    this.visitedStations.push(station);
+  }
+
+  getVisitedStations(station: string) {
+    for (let i = 0; i < this.visitedStations.length; i++) {
+      if (station === this.visitedStations[i]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  calculateJourney(currency: string) {
+    this.visitedStations = [];
     this.journey = null;
     this.isLoading = true;
     this.hasData = true;
@@ -46,14 +61,19 @@ export class JourneyFormComponent {
       exchangeRate = this.sterlingExchangeRate;
     }
 
-    this.flightService.getFlights(0).subscribe((flights: Flight[]) => {
+    this.flightService.getFlights(2).subscribe((flights: Flight[]) => {
       const journeyFlights: Flight[] = [];
-      let currentOrigin = this.origin;
+      let currentOrigin = this.origin.toUpperCase();
+      this.destination = this.destination.toUpperCase();
+      console.log(currentOrigin);
+      console.log(this.destination);
+      let iterations = 0;
 
-      while (currentOrigin !== this.destination) {
+      while (currentOrigin !== this.destination && iterations < flights.length) {
+        iterations++;
         let nextFlight: any = flights.find((flight) => flight.departureStation === currentOrigin);
 
-        if (nextFlight) {
+        if (nextFlight && !this.getVisitedStations(currentOrigin)) {
 
           let transport = {
             flightCarrier: nextFlight.flightCarrier,
@@ -68,6 +88,7 @@ export class JourneyFormComponent {
           };
 
           journeyFlights.push(flight);
+          this.saveVisitedStations(currentOrigin);
           currentOrigin = nextFlight.arrivalStation;
         } else {
           this.journey = null;
@@ -83,6 +104,8 @@ export class JourneyFormComponent {
         price: journeyFlights.reduce((totalPrice, flight) => totalPrice + flight.price, 0),
         flights: journeyFlights
       };
+
+      console.log(JSON.stringify(this.journey))
       this.isLoading = false;
     });
   }

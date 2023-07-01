@@ -6,4 +6,3 @@ export interface Journey {
 	destination: string;
 	price: number;
 }
-  

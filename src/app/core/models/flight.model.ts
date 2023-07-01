@@ -6,4 +6,3 @@ export interface Flight {
 	arrivalStation: string;
 	price: number;
 }
-  
