@@ -25,7 +25,7 @@ describe('JourneyFormComponent', () => {
 
   it('should calculate journey correctly', () => {
 
-    let flight: any[]  = [
+    let flights: any[]  = [
     {
       departureStation: "MZL",
       arrivalStation: "MDE",
@@ -169,7 +169,7 @@ describe('JourneyFormComponent', () => {
   
     component.origin = 'MZL';
     component.destination = 'BCN';
-    component.calculateRoute(flight, 'USD');
+    component.calculateRoute(flights, 'USD');
   
     const expectedJourney: Journey = {
       origin: 'MZL',

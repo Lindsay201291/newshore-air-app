@@ -54,6 +54,10 @@ h1 {
   width: 100%;
 }
 
+p {
+	margin-bottom: 0.25rem;
+}
+
 li {
 	margin-left: 20px;
 }

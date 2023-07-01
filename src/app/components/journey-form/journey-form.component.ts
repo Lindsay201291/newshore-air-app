@@ -63,8 +63,6 @@ export class JourneyFormComponent {
     const journeyFlights: Flight[] = [];
       let currentOrigin = this.origin.toUpperCase();
       this.destination = this.destination.toUpperCase();
-      console.log(currentOrigin);
-      console.log(this.destination);
       let iterations = 0;
 
       while (currentOrigin !== this.destination && iterations < flights.length) {
@@ -77,8 +75,6 @@ export class JourneyFormComponent {
             flightCarrier: nextFlight.flightCarrier,
             flightNumber: nextFlight.flightNumber
           };
-
-          console.log("TRANSPORTE: "+JSON.stringify(transport));
 
           let flight: Flight = {
             transport: transport,
@@ -105,7 +101,6 @@ export class JourneyFormComponent {
         flights: journeyFlights
       };
 
-      console.log(JSON.stringify(this.journey))
       this.isLoading = false;
   }
 
@@ -114,6 +109,10 @@ export class JourneyFormComponent {
     this.journey = null;
     this.flightService.getFlights(2).subscribe((flights: Flight[]) => {
       this.calculateRoute(flights, currency);
+    },
+    (error) => {
+      this.hasData = false;
+      this.isLoading = false;
     });
   }
 
