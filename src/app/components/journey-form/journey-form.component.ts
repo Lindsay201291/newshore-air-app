@@ -23,10 +23,15 @@ export class JourneyFormComponent {
   constructor(private flightService: FlightService, private currencyExchangeRateService: CurrencyExchangeRateService) { }
 
   ngOnInit(): void {
-    this.currencyExchangeRateService.getCurrencyData().subscribe(response => {
-      this.euroExchangeRate = response.data['EUR'];
-      this.sterlingExchangeRate = response.data['GBP'];
-    });
+    this.currencyExchangeRateService.getCurrencyData().subscribe({
+      next: (response) => {
+        this.euroExchangeRate = response.data['EUR'];
+        this.sterlingExchangeRate = response.data['GBP'];
+      },
+      error: (error) => {
+        console.log(error.message);
+      }
+    });    
   }
 
   resetJourney() {
@@ -132,6 +137,7 @@ export class JourneyFormComponent {
               break;
           }
         }
+
         let index = flights.indexOf(route);
 
         if (index !== -1) {
@@ -142,6 +148,7 @@ export class JourneyFormComponent {
           break;
         }
     }
+
     if (journeyFlights.length > 0) {
       this.journey = {
         origin: this.origin,
@@ -149,6 +156,7 @@ export class JourneyFormComponent {
         price: journeyFlights.reduce((totalPrice, flight) => totalPrice + flight.price, 0),
         flights: journeyFlights
       };
+      
     } else {
       this.journey = null;
       this.isLoading = false;
@@ -161,12 +169,15 @@ export class JourneyFormComponent {
   getFlights(currency: string) {
     this.isLoading = true;
     this.journey = null;
-    this.flightService.getFlights(2).subscribe((flights: Flight[]) => {
-      this.calculateRoute(flights, currency);
-    },
-    (error) => {
-      this.hasData = false;
-      this.isLoading = false;
+    this.flightService.getFlights(2).subscribe({
+      next: (flights: Flight[]) => {
+        this.calculateRoute(flights, currency);
+      },
+      error: (error) => {
+        this.hasData = false;
+        this.isLoading = false;
+        console.log(error.message);
+      }
     });
   }
 
