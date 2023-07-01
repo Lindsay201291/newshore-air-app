@@ -60,46 +60,100 @@ export class JourneyFormComponent {
       exchangeRate = this.sterlingExchangeRate;
     }
 
-    const journeyFlights: Flight[] = [];
+    let journeyFlights: Flight[] = [];
       let currentOrigin = this.origin.toUpperCase();
       this.destination = this.destination.toUpperCase();
       let iterations = 0;
 
-      while (currentOrigin !== this.destination && iterations < flights.length) {
+      while (iterations < flights.length) {
         iterations++;
-        let nextFlight: any = flights.find((flight) => flight.departureStation === currentOrigin);
+        journeyFlights = [];
+        this.visitedStations = [];
+        currentOrigin = this.origin.toUpperCase();
+        let route: any;
 
-        if (nextFlight && !this.getVisitedStations(currentOrigin)) {
+        route = flights.find((flight) => flight.departureStation === currentOrigin);
 
-          let transport = {
-            flightCarrier: nextFlight.flightCarrier,
-            flightNumber: nextFlight.flightNumber
-          };
+        while (currentOrigin !== this.destination) {
 
-          let flight: Flight = {
-            transport: transport,
-            origin: nextFlight.departureStation.toUpperCase(),
-            destination: nextFlight.arrivalStation.toUpperCase(),
-            price: parseFloat((nextFlight.price*exchangeRate).toFixed(2))
-          };
+          let nextFlight: any;
 
-          journeyFlights.push(flight);
-          this.saveVisitedStations(currentOrigin);
-          currentOrigin = nextFlight.arrivalStation;
-        } else {
-          this.journey = null;
-          this.isLoading = false;
-          this.hasData = false;
-          return;
+          nextFlight = flights.find(flight => flight.departureStation === currentOrigin && flight.arrivalStation === this.destination);
+          
+          if (nextFlight) {
+            let transport = {
+              flightCarrier: nextFlight.flightCarrier,
+              flightNumber: nextFlight.flightNumber
+            };
+
+            let flight: Flight = {
+              transport: transport,
+              origin: nextFlight.departureStation.toUpperCase(),
+              destination: nextFlight.arrivalStation.toUpperCase(),
+              price: parseFloat((nextFlight.price*exchangeRate).toFixed(2))
+            };
+
+            journeyFlights.push(flight);
+            this.saveVisitedStations(currentOrigin);
+            currentOrigin = nextFlight.arrivalStation;
+
+            this.journey = {
+              origin: this.origin,
+              destination: this.destination,
+              price: journeyFlights.reduce((totalPrice, flight) => totalPrice + flight.price, 0),
+              flights: journeyFlights
+            };
+
+            this.isLoading = false;
+            return;
+          }
+
+          nextFlight = flights.find((flight) => flight.departureStation === currentOrigin);
+
+          if (nextFlight && !this.getVisitedStations(currentOrigin)) {
+
+            let transport = {
+              flightCarrier: nextFlight.flightCarrier,
+              flightNumber: nextFlight.flightNumber
+            };
+
+            let flight: Flight = {
+              transport: transport,
+              origin: nextFlight.departureStation.toUpperCase(),
+              destination: nextFlight.arrivalStation.toUpperCase(),
+              price: parseFloat((nextFlight.price*exchangeRate).toFixed(2))
+            };
+
+            journeyFlights.push(flight);
+            this.saveVisitedStations(currentOrigin);
+            currentOrigin = nextFlight.arrivalStation;
+
+          } else {
+              break;
+          }
         }
-      }
+        let index = flights.indexOf(route);
 
+        if (index !== -1) {
+          flights.splice(index, 1);
+        }
+
+        if (currentOrigin === this.destination) {
+          break;
+        }
+    }
+    if (journeyFlights.length > 0) {
       this.journey = {
         origin: this.origin,
         destination: this.destination,
         price: journeyFlights.reduce((totalPrice, flight) => totalPrice + flight.price, 0),
         flights: journeyFlights
       };
+    } else {
+      this.journey = null;
+      this.isLoading = false;
+      this.hasData = false;
+    }
 
       this.isLoading = false;
   }
