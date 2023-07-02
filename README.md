@@ -8,7 +8,7 @@ Descargue e instale [Node.js](https://nodejs.org/es/download).
 
 Una vez descargado e instalado Node.js, ejecute el comando `npm i -g @angular/cli` en la terminal.
 
-Una vez que haya descargado el repositorio, diríjase a la carpeta del proyecto y ejecute el comando `npm install` para descargar los paquetes necesarios.
+Después que haya descargado el repositorio, diríjase a la carpeta del proyecto y ejecute el comando `npm install` para descargar los paquetes necesarios.
 
 ## Servidor de desarrollo
 
