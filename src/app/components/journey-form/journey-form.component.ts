@@ -51,19 +51,22 @@ export class JourneyFormComponent {
     return false;
   }
 
+  getExchangeRate(currency: string): number {
+    if (currency === "USD") {
+      return 1;
+    } else if (currency === "EUR") {
+      return this.euroExchangeRate;
+    } else if (currency === "GBP") {
+      return this.sterlingExchangeRate;
+    }
+    return 0;
+  }
+
   calculateRoute(flights: any[], currency: string) {
     this.visitedStations = [];
     this.journey = null;
     this.hasData = true;
-    let exchangeRate: number = 0;
-
-    if (currency === "USD") {
-      exchangeRate = 1;
-    } else if (currency === "EUR") {
-      exchangeRate = this.euroExchangeRate;
-    } else if (currency === "GBP") {
-      exchangeRate = this.sterlingExchangeRate;
-    }
+    let exchangeRate: number = this.getExchangeRate(currency);
 
     let journeyFlights: Flight[] = [];
       let currentOrigin = this.origin.toUpperCase();
@@ -170,7 +173,7 @@ export class JourneyFormComponent {
         }
       } 
     
-      if (currentOrigin === this.destination) {
+      if (currentOrigin === this.destination && this.origin !== this.destination) {
         this.journey = {
           origin: this.origin,
           destination: this.destination,
