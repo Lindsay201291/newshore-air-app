@@ -153,7 +153,7 @@ export class JourneyFormComponent {
       this.journey = {
         origin: this.origin,
         destination: this.destination,
-        price: journeyFlights.reduce((totalPrice, flight) => totalPrice + flight.price, 0),
+        price: parseFloat(journeyFlights.reduce((totalPrice, flight) => totalPrice + flight.price, 0).toFixed(2)),
         flights: journeyFlights
       };
       
