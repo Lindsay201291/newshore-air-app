@@ -75,12 +75,10 @@ export class JourneyFormComponent {
         journeyFlights = [];
         this.visitedStations = [];
         currentOrigin = this.origin.toUpperCase();
-        let route: any;
 
-        route = flights.find((flight) => flight.departureStation === currentOrigin);
+        let firstRoute = flights.find((flight) => flight.departureStation === currentOrigin);
 
         while (currentOrigin !== this.destination) {
-
           let nextFlight: any;
 
           nextFlight = flights.find(flight => flight.departureStation === currentOrigin && flight.arrivalStation === this.destination);
@@ -116,8 +114,7 @@ export class JourneyFormComponent {
 
           nextFlight = flights.find((flight) => flight.departureStation === currentOrigin);
 
-          if (nextFlight && !this.getVisitedStations(currentOrigin)) {
-
+          if (nextFlight && !this.getVisitedStations(nextFlight.arrivalStation)) {
             let transport = {
               flightCarrier: nextFlight.flightCarrier,
               flightNumber: nextFlight.flightNumber
@@ -133,36 +130,58 @@ export class JourneyFormComponent {
             journeyFlights.push(flight);
             this.saveVisitedStations(currentOrigin);
             currentOrigin = nextFlight.arrivalStation;
-
-          } else {
+          } else if (journeyFlights.length > 1) {
+              let numberOfFlights = journeyFlights.length;
+        
+              let route = flights.find(flight => flight.departureStation === journeyFlights[numberOfFlights - 1].origin && flight.arrivalStation === journeyFlights[numberOfFlights - 1].destination);
+              let index = flights.indexOf(route);
+              if (index !== -1) {
+                flights.splice(index, 1);
+              }
               break;
+          }
+
+          if (this.getVisitedStations(nextFlight.arrivalStation)) {
+            let route = flights.find(flight => flight.arrivalStation === this.origin);
+            let index = flights.indexOf(route);
+            if (index !== -1) {
+              flights.splice(index, 1);
+            }
+            break;
           }
         }
 
-        let index = flights.indexOf(route);
+        let count = flights.filter(flight => flight.departureStation === this.origin).reduce((acumulador: number) => acumulador + 1, 0);
+        if (count > 1) {
+          let index = flights.indexOf(firstRoute);
 
+          if (index !== -1) {
+            flights.splice(index, 1);
+          }
+        }
+      }
+
+      if (journeyFlights.length > 1) {
+        let numberOfFlights = journeyFlights.length;
+        let route = flights.find(flight => flight.departureStation === journeyFlights[numberOfFlights - 1].origin && flight.arrivalStation === journeyFlights[numberOfFlights - 1].destination);
+        let index = flights.indexOf(route);
         if (index !== -1) {
           flights.splice(index, 1);
         }
-
-        if (currentOrigin === this.destination) {
-          break;
-        }
-    }
-
-    if (journeyFlights.length > 0) {
-      this.journey = {
-        origin: this.origin,
-        destination: this.destination,
-        price: parseFloat(journeyFlights.reduce((totalPrice, flight) => totalPrice + flight.price, 0).toFixed(2)),
-        flights: journeyFlights
-      };
-      
-    } else {
-      this.journey = null;
-      this.isLoading = false;
-      this.hasData = false;
-    }
+      } 
+    
+      if (currentOrigin === this.destination) {
+        this.journey = {
+          origin: this.origin,
+          destination: this.destination,
+          price: parseFloat(journeyFlights.reduce((totalPrice, flight) => totalPrice + flight.price, 0).toFixed(2)),
+          flights: journeyFlights
+        };
+      } else {
+        this.journey = null;
+        this.isLoading = false;
+        this.hasData = false;
+      }
     window.scrollTo(0, document.body.scrollHeight);
     this.isLoading = false;
   }
