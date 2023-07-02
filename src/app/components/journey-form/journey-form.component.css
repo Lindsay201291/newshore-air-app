@@ -1,9 +1,9 @@
 .container {
-	background-color: #85b1e8;
+	background-color: #9caec4;
 	color: white;
 }
 
-.container, .flight-detail-container {
+.container {
 	padding: 20px;
 }
 
@@ -11,13 +11,9 @@
 	padding-left: 135px;
 }
 
-.search-button {
-	background-color: #e04438;
-	color: white;
-	border-radius: 10px;
-	border: none;
-	padding: 10px;
-	margin-left: 145px;
+.large-button, .small-button {
+  background-color: #17203d;
+  color: #fff;
 }
 
 .search-button:disabled {
@@ -31,7 +27,7 @@
 	background: url('https://i.imgur.com/0oQWHNt.jpg') no-repeat;
   padding: 10px;
 	width: 100%;
-	height: 220px;
+	height: 260px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -41,7 +37,7 @@ h1 {
 	font-weight: bold;
 }
 
-.header, .footer {
+.header, .footer, .form-header {
   background-color: #17203d;
   color: white;
 }
@@ -54,9 +50,36 @@ h1 {
   width: 100%;
 }
 
+.form-header {
+  font-size: 1.5rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem
+}
+
 .text-field {
 	border: none;
 	border-radius: 5px;
+}
+
+.large-button:disabled,
+.search-button:disabled {
+	.small-button:disabled {
+		opacity: .7;
+			background-color: lightgray;	
+	}
+}
+
+.form-container {
+  position: relative;
+  bottom: 68px;
+}
+.search-container {
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem
+}
+
+.bottom-space {
+	padding-bottom: 100px;
 }
 
 p {
@@ -71,4 +94,18 @@ li {
   .flight-detail-container {
 		padding-left: 45px;
 	}
+}
+
+@media (min-width: 575px) {
+  .large-button {
+    display: none;
+  }
+}
+@media (max-width: 575px) {
+  .small-button {
+    display: none;
+  }
+  .large-button {
+    width: 100%;
+  }
 }

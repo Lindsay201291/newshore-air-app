@@ -10,37 +10,52 @@
   
 <div class="banner-container">
 </div>
-<div class="container d-flex justify-content-center align-items-center my-4">
-	<form (ngSubmit)="getFlights(currency)" #journeyForm="ngForm">
-			<div class="form-group">
-				<label class="mr-2" for="originInput">Origen:</label>
-				<input class="pl-1 text-field" id="originInput" type="text" name="origin" [(ngModel)]="origin" maxlength="3" required (input)="onInputToUpper($event)">
+
+<div class="form-container">
+  <div class="container p-3 form-header text-center">
+    ¿A dónde quieres viajar?
+  </div>
+
+	<div class="container search-container">
+		<form (ngSubmit)="getFlights(currency)" #journeyForm="ngForm">
+			<div class="form-row d-flex justify-content-center align-items-center">
+				<div class="col-sm-3 my-1">
+					<label class="sr-only" for="originInput">Origen:</label>
+					<input class="form-control" id="originInput" type="text" name="origin" placeholder="Origen" [(ngModel)]="origin" maxlength="3" required (input)="onInputToUpper($event)">
+				</div>
+				<div class="col-sm-3 my-1">
+					<label class="sr-only" for="destinationInput">Destino:</label>
+					<input class="form-control" id="destinationInput" type="text" name="destination" placeholder="Destino" [(ngModel)]="destination" maxlength="3" required (input)="onInputToUpper($event)">
+				</div>
+				<div class="col-sm-3 my-1">
+					<label class="sr-only" for="currencySelect">Moneda:</label>
+					<select class="form-control" id="currencySelect" name="currency" [(ngModel)]="currency" (change)="resetJourney()" required>
+						<option value="" disabled selected>Moneda</option>
+						<option value="USD">USD</option>
+						<option value="EUR">EUR</option>
+						<option value="GBP">GBP</option>
+					</select>
+				</div>
+				<div class="col-auto my-1">
+					<button class="btn font-weight-bold small-button" type="submit" [disabled]="!journeyForm.valid || isLoading">Buscar ruta</button>
+				</div>
+				<div class="col-sm-12 my-1">
+					<button type="submit" class="btn font-weight-bold large-button" [disabled]="!journeyForm.valid || isLoading">Buscar ruta</button>
+				</div>
 			</div>
-			<div class="form-group">
-				<label class="mr-2" for="destinationInput">Destino:</label>
-				<input class="pl-1 text-field" id="destinationInput" type="text" name="destination" [(ngModel)]="destination" maxlength="3" required (input)="onInputToUpper($event)">
-			</div>
-			<div class="form-group">
-				<label class="mr-2 " for="currencySelect">Moneda:</label>
-				<select class="text-field" id="currencySelect" name="currency" [(ngModel)]="currency" (change)="resetJourney()" required>
-					<option value="USD">USD</option>
-					<option value="EUR">EUR</option>
-					<option value="GBP">GBP</option>
-				</select>
-			</div>
-			<button class="search-button" type="submit" [disabled]="!journeyForm.valid">Buscar ruta</button>
 		</form>
+	</div>
 </div>
 
-<div class="text-center" *ngIf="isLoading">
+<div class="text-center bottom-space" *ngIf="isLoading">
 	<p>Cargando...</p>
 </div>
 
-<div class="text-center" *ngIf="!hasData && !isLoading">
+<div class="text-center bottom-space" *ngIf="!hasData && !isLoading">
 	<p>Su consulta no pudo ser procesada.</p>
 </div>
 
-<div class="mb-5 flight-detail-container justify-content-center align-items-center my-4" *ngIf="journey">
+<div class="mb-5 flight-detail-container justify-content-center align-items-center" *ngIf="journey">
 	<div>
 		<h4>Vuelo:</h4>
 		<p>Origen: {{ journey.origin | uppercase }}</p>
@@ -49,7 +64,7 @@
 		<p *ngIf="currency === 'EUR'">Precio total: €{{ journey.price }}</p>
 		<p *ngIf="currency === 'GBP'">Precio total: £{{ journey.price }}</p>
 	</div>
-	<div class="pt-2">
+	<div class="pt-4 pb-4">
 		<h4>Ruta de vuelo:</h4>
 		<ul>
 			<li *ngFor="let flight of journey.flights">
