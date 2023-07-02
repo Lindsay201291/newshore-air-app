@@ -110,6 +110,7 @@ export class JourneyFormComponent {
             };
 
             this.isLoading = false;
+            window.scrollTo(0, document.body.scrollHeight);
             return;
           }
 
@@ -162,8 +163,8 @@ export class JourneyFormComponent {
       this.isLoading = false;
       this.hasData = false;
     }
-
-      this.isLoading = false;
+    window.scrollTo(0, document.body.scrollHeight);
+    this.isLoading = false;
   }
 
   getFlights(currency: string) {
